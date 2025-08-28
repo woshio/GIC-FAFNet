@@ -58,38 +58,6 @@ class MFAAM(nn.Module):
 
         return out
 
-class DCVZL(nn.Module):
-    """CSP Bottleneck with 3 convolutions."""
-
-    def __init__(self, c1, c2, e=0.5):
-        """Initialize the CSP Bottleneck with given channels, number, shortcut, groups, and expansion values."""
-        super().__init__()
-        c_ = int(c2 * e)  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1)
-        self.cv2 = Conv(c1, c_, 1, 1)
-        self.cv3 = Conv(c_ * 4, c2, 1)  # optional act=FReLU(c2)
-        self.cv2 = Conv(c1, c1, 3, 1)
-        self.dcn = DCNv2(c_,c_,kernel_size=3)
-        self.cbam =CBAM(c2)
-
-    def forward(self, x):
-        """Forward pass through the CSP bottleneck with 2 convolutions."""
-        x00 = self.cv1(x)
-        x01 = self.cv2(x)
-
-        x10 = self.cv1(x01)
-        x11 = self.cv2(x01)
-
-        x20 = self.cv1(x11)
-        x21 = self.cv1(x11)
-        x21 = self.dcn(x21)
-        x21 = self.cbam(x21)
-
-        x3 = torch.cat([x00,x10,x20,x21],dim=1)
-
-        return self.cv3(x3)
-
-
 class DCNv2(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
                  padding=None, groups=1, dilation=1, act=True, deformable_groups=1):

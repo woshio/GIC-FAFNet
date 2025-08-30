@@ -343,9 +343,9 @@ class yolo_heatmap:
         
 def get_params():
     params = {
-        'weight': 'yolo11n.pt', # 现在只需要指定权重即可,不需要指定cfg
+        'weight': 'yolov8n.pt', 
         'device': 'cuda:0',
-        'method': 'GradCAMPlusPlus', # GradCAMPlusPlus, GradCAM, XGradCAM, EigenCAM, HiResCAM, LayerCAM, RandomCAM, EigenGradCAM, KPCA_CAM
+        'method': 'GradCAMPlusPlus', 
         'layer': [10, 12, 14, 16, 18],
         'backward_type': 'all', # detect:<class, box, all> segment:<class, box, segment, all> pose:<box, keypoint, all> obb:<box, angle, all> classify:<all>
         'conf_threshold': 0.2, # 0.2
